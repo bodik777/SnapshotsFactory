@@ -1,3 +1,5 @@
+package com.bodik;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,7 +11,7 @@ import org.jboss.resteasy.client.ClientResponse;
 @SuppressWarnings("deprecation")
 public class SnapshotsFactory {
 
-	static String[] tagsk = { "city", "url", "param", "location", " place",
+	static String[] tagsk = { "city", "url", "param", "location", "place",
 			"kind", "street", "state", "sale_date", "price", "Product",
 			"Price", "Country" };
 	static ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsk));
@@ -40,11 +42,11 @@ public class SnapshotsFactory {
 
 	public static String getRequest() {
 		StringBuilder sb = new StringBuilder(
-				"{\"type\": \"snapshot\",\"userId\":")
+				"{\"type\":\"snapshot\",\"userId\":")
 				.append(rand.nextInt(99999))
-				.append(",\"avps\": {\"appurl\": \"/oss-ui/tools/toolbox.jsp\",\"locationId\":")
+				.append(",\"avps\":{\"appurl\":\"/oss-ui/tools/toolbox.jsp\",\"locationId\":")
 				.append(rand.nextInt(99999)).append(",").append(getTags(12))
-				.append("} ,\"data\" : [{").append(getTags(4)).append("}]}");
+				.append("},\"data\":[{").append(getTags(4)).append("}]}");
 		return sb.toString();
 	}
 
