@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
+import org.json.JSONObject;
 
 @SuppressWarnings("deprecation")
 public class SnapshotsFactory {
@@ -19,21 +19,13 @@ public class SnapshotsFactory {
 
 	public static void main(String[] args) {
 		String ROOT_URL = args[1];
-		int kilkkL = Integer.parseInt(args[0]);
-		for (int i = 0; i < kilkkL; i++) {
+		int numberOfRequest = Integer.parseInt(args[0]);
+		for (int i = 1; i <= numberOfRequest; i++) {
 			try {
 				ClientRequest request = new ClientRequest(ROOT_URL);
 				request.accept("application/json");
 				String input = getRequest();
-				System.out.println(input);
 				request.body("application/json", input);
-
-				ClientResponse<String> response = request.post(String.class);
-				int status = response.getStatus();
-				System.out.println("Request Sales - putToTable: Status: "
-						+ status
-						+ (status == 200 ? "; Request success!"
-								: "; Request failed!"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -41,29 +33,29 @@ public class SnapshotsFactory {
 	}
 
 	public static String getRequest() {
-		StringBuilder sb = new StringBuilder(
-				"{\"type\":\"snapshot\",\"userId\":")
-				.append(rand.nextInt(99999))
-				.append(",\"avps\":{\"appurl\":\"/oss-ui/tools/toolbox.jsp\",\"locationId\":")
-				.append(rand.nextInt(99999)).append(",").append(getTags(12))
-				.append("},\"data\":[{").append(getTags(4)).append("}]}");
-		return sb.toString();
+		JSONObject json = new JSONObject();
+		json.put("type", "snapshot");
+		json.put("userId", rand.nextInt(99999));
+		json.put("avps", getTags(12, true));
+		json.put("data", getTags(4, false));
+		return json.toString();
 	}
 
-	public static String getTags(int kk) {
-		int kilk = 12;
-		StringBuilder ss = new StringBuilder();
-		int k = rand.nextInt(kk) + 1;
+	public static JSONObject getTags(int numberOfTags, Boolean isTags) {
+		JSONObject jtags = new JSONObject();
+		if (isTags) {
+			jtags.put("appurl", "/oss-ui/tools/toolbox.jsp");
+			jtags.put("locationId", rand.nextInt(99999));
+		}
+		int k = rand.nextInt(numberOfTags) + 1;
 		HashSet<String> set = new HashSet<String>();
 		for (int i = 0; i < k; i++) {
-			set.add(tags.get(rand.nextInt(kilk)));
+			set.add(tags.get(rand.nextInt(tagsk.length)));
 		}
 		for (String el : set) {
-			ss.append("\"").append(el).append("\":\"").append(el)
-					.append(rand.nextInt(kilk)).append("\",");
+			jtags.put(el, el + rand.nextInt(999));
 		}
-		ss.deleteCharAt(ss.length() - 1);
-		return ss.toString();
+		return jtags;
 	}
 
 }
