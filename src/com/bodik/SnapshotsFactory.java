@@ -1,8 +1,5 @@
 package com.bodik;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Random;
 
 import org.jboss.resteasy.client.ClientRequest;
@@ -11,16 +8,15 @@ import org.json.JSONObject;
 @SuppressWarnings("deprecation")
 public class SnapshotsFactory {
 
-	static String[] tagsk = { "city", "url", "param", "location", "place",
+	static String[] tags = { "city", "url", "param", "location", "place",
 			"kind", "street", "state", "sale_date", "price", "Product",
 			"Price", "Country" };
-	static ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsk));
 	static Random rand = new Random();
 
 	public static void main(String[] args) {
 		String ROOT_URL = args[1];
 		int numberOfRequest = Integer.parseInt(args[0]);
-		for (int i = 1; i <= numberOfRequest; i++) {
+		for (int i = 0; i < numberOfRequest; i++) {
 			try {
 				ClientRequest request = new ClientRequest(ROOT_URL);
 				request.accept("application/json");
@@ -43,18 +39,25 @@ public class SnapshotsFactory {
 
 	public static JSONObject getTags(int numberOfTags, Boolean isTags) {
 		JSONObject jtags = new JSONObject();
+		int k = rand.nextInt(numberOfTags) + 1;
 		if (isTags) {
 			jtags.put("appurl", "/oss-ui/tools/toolbox.jsp");
 			jtags.put("locationId", rand.nextInt(99999));
+			while (jtags.length() < k + 2) {
+				String tag = tags[rand.nextInt(tags.length)];
+				if (!jtags.has(tag)) {
+					jtags.put(tag, tag + rand.nextInt(999));
+				}
+			}
+		} else {
+			while (jtags.length() < k) {
+				String tag = tags[rand.nextInt(tags.length)];
+				if (!jtags.has(tag)) {
+					jtags.put(tag, tag + rand.nextInt(999));
+				}
+			}
 		}
-		int k = rand.nextInt(numberOfTags) + 1;
-		HashSet<String> set = new HashSet<String>();
-		for (int i = 0; i < k; i++) {
-			set.add(tags.get(rand.nextInt(tagsk.length)));
-		}
-		for (String el : set) {
-			jtags.put(el, el + rand.nextInt(999));
-		}
+
 		return jtags;
 	}
 
