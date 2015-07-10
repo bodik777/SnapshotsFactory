@@ -1,5 +1,6 @@
 package com.bodik;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.jboss.resteasy.client.ClientRequest;
@@ -78,6 +79,28 @@ public class SnapshotsFactory {
 
 	}
 
+	public static Object generateData(int numberOfData) {
+		int numberDataType = rand.nextInt(6);
+		switch (numberDataType) {
+		case 0: {
+			return generateDataListObject(numberOfData);
+		}
+		case 1: {
+			return generateDataObject(numberOfData);
+		}
+		case 2: {
+			return generateDataString(numberOfData);
+		}
+		case 3: {
+			return generateDataDecimal();
+		}
+		case 4: {
+			return generateDataBoolean();
+		}
+		}
+		return null;
+	}
+
 	public static String generateRequest() {
 		final int NUMBER_DATA = rand.nextInt(tags.length);
 		final int NUMBER_TAGS = rand.nextInt(tags.length - 1) + 1;
@@ -98,7 +121,7 @@ public class SnapshotsFactory {
 		return sb.toString();
 	}
 
-	public static JSONObject generateData(int numberOfData) {
+	public static JSONObject generateDataObject(int numberOfData) {
 		JSONObject jdata = new JSONObject();
 		while (jdata.length() < numberOfData) {
 			String data = generateWord();
@@ -107,6 +130,42 @@ public class SnapshotsFactory {
 			}
 		}
 		return jdata;
+	}
+
+	public static ArrayList<JSONObject> generateDataListObject(int numberOfData) {
+		ArrayList<JSONObject> listObj = new ArrayList<JSONObject>();
+		int listSize = rand.nextInt(2);
+		for (int i = 0; i <= listSize; i++) {
+			JSONObject jdata = new JSONObject();
+			while (jdata.length() < numberOfData) {
+				String data = generateWord();
+				if (!jdata.has(data)) {
+					jdata.put(data, generateWord());
+				}
+			}
+			listObj.add(jdata);
+		}
+		return listObj;
+	}
+
+	public static String generateDataString(int numberWord) {
+		StringBuilder res = new StringBuilder();
+		for (int i = 0; i <= numberWord; i++) {
+			if (i == numberWord) {
+				res.append(generateWord());
+			} else {
+				res.append(generateWord()).append(" ");
+			}
+		}
+		return res.toString();
+	}
+
+	public static Boolean generateDataBoolean() {
+		return rand.nextBoolean();
+	}
+
+	public static float generateDataDecimal() {
+		return rand.nextFloat();
 	}
 
 	public static JSONObject generateTags(int numberOfTags) {
