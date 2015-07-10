@@ -80,7 +80,7 @@ public class SnapshotsFactory {
 	}
 
 	public static Object generateData(int numberOfData) {
-		int numberDataType = rand.nextInt(6);
+		int numberDataType = rand.nextInt(5);
 		switch (numberDataType) {
 		case 0: {
 			return generateDataListObject(numberOfData);
